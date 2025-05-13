@@ -1,1 +1,73 @@
+void main() {
+  List<UserData> a = [
+        UserData(userId: 1, name: 'John'),
+        UserData(userId: 2, name: 'Jane'),
+      ],
+      b = [
+        UserData(userId: 1, dateOfBirth: '02-05-2000'),
+        UserData(userId: 3, dateOfBirth: '15-08-1998'),
+      ];
+  List<UserData> mergeUserData() {
+    List<UserData> result = [];
 
+    for (int i = 0; i < a.length; i++) {
+      if (a[i].userId != null && b[i].userId != null) {
+        if (a[i].userId == b[i].userId) {
+          result.add(
+            UserData(
+              userId: a[i].userId,
+              dateOfBirth:
+                  a[i].dateOfBirth != null
+                      ? a[i].dateOfBirth
+                      : b[i].dateOfBirth,
+              name: a[i].name != null ? a[i].name : b[i].name,
+            ),
+          );
+        } else {
+          if (a[i].userId != null) {
+            result.add(
+              UserData(userId: a[i].userId, dateOfBirth: null, name: a[i].name),
+            );
+          }
+          if (b[i].userId != null) {
+            result.add(
+              UserData(
+                userId: b[i].userId,
+                dateOfBirth: b[i].dateOfBirth,
+                name: b[i].name,
+              ),
+            );
+          }
+        }
+      }
+    }
+    return result;
+  }
+
+  Map<String, dynamic> countFun() {
+    Map<String, dynamic> analyticsResult = {};
+    List<UserData> secondResult = mergeUserData();
+    int nameMissingCount = 0, dateMissingCount = 0;
+
+    for (int i = 0; i < secondResult.length; i++) {
+      if (secondResult[i].name == null) {
+        nameMissingCount++;
+        analyticsResult["nameMissingCount"] = nameMissingCount;
+      }
+      if (secondResult[i].dateOfBirth == null) {
+        dateMissingCount++;
+        analyticsResult["dateOfBirthMissingCount"] = dateMissingCount;
+      }
+    }
+    print("${analyticsResult}");
+    return analyticsResult;
+  }
+}
+
+class UserData {
+  final int? userId;
+  final String? name;
+  final String? dateOfBirth;
+
+  UserData({this.userId, this.name, this.dateOfBirth});
+}
