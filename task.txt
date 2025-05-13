@@ -1,1 +1,96 @@
 
+void main() {
+  final a = [
+    {"userID": 1, "Name": "Jhon"},
+    {"userID": 2, "Name": "Jane"},
+    {"userID": 3, "Name": "ABC"},
+    {"userID": 4, "Name": "XYZ"},
+  ];
+
+  final b = [
+    {"userID": 1, "DateOfBirth": "02-05-2000"},
+    {"userID": 3, "DateOfBirth": "15-08-1998"},
+    {"userID": 4, "DateOfBirth": "20-08-1998"},
+    {"userID": 5, "DateOfBirth": "30-08-1998"},
+  ];
+
+  final mergedData = mergeUserData(a, b);
+  final analytics = analyse(mergedData);
+
+  print(mergedData);
+  print(analytics);
+}
+
+List<Map<String, dynamic>> mergeUserData(
+  List<Map<String, dynamic>> a,
+  List<Map<String, dynamic>> b,
+) {
+  final userIds = [...a, ...b].map((e) => e['userID']).toSet().toList();
+  userIds.sort();
+
+  final mergedData =
+      userIds.map((userID) {
+        String? name;
+        try {
+          name = a.firstWhere((e) => e['userID'] == userID)['Name'];
+        } catch (e) {
+          name = null;
+        }
+
+        String? date;
+        try {
+          date = b.firstWhere((e) => e['userID'] == userID)['DateOfBirth'];
+        } catch (e) {
+          date = null;
+        }
+
+        return {"userID": userID, "Name": name, "DateOfBirth": date};
+      }).toList();
+
+  return mergedData;
+}
+
+Map<String, dynamic> analyse(List<Map<String, dynamic>> data) {
+  int nameMissing = 0;
+  int dateMissing = 0;
+
+  Map<String, Map<String, dynamic>> dateAnalytics = {};
+
+  for (int i = 0; i < data.length; i++) {
+    if (data[i]['Name'] == null) {
+      nameMissing++;
+    }
+    if (data[i]['DateOfBirth'] == null) {
+      dateMissing++;
+    }
+
+    if (data[i]['DateOfBirth'] != null) {
+      final splits = data[i]['DateOfBirth'].split('-');
+      final date = int.parse(splits.first);
+      final monthYear = splits.sublist(1).join('-');
+
+      if (dateAnalytics.containsKey(monthYear)) {
+        final prevData = dateAnalytics['${monthYear}'];
+
+        dateAnalytics['${monthYear}'] = {
+          'count': prevData?['count'] + 1,
+          'youngest':
+              date >
+                      int.parse(
+                        prevData?['youngest']['DateOfBirth'].split('-').first,
+                      )
+                  ? data[i]
+                  : prevData?['youngest']['DateOfBirth'],
+        };
+      } else {
+        dateAnalytics['${monthYear}'] = {'count': 1, 'youngest': data[i]};
+      }
+    }
+  }
+
+  return {
+    'nameMissingCount': nameMissing,
+    'dateOfBirthMissingCount': dateMissing,
+    'monthYearStats': dateAnalytics,
+  };
+}
