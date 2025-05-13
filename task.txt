@@ -1,1 +1,31 @@
+const a = [
+  { userID: 1, Name: "Jhon" },
+  { userID: 3, Name: "Jatin" },
+  { userID: 5, Name: "Pathil" },
+  { userID: 4, Name: "Bansari" },
+]
 
+const b = [
+  { userID: 1, DateOfBirth: "02-05-2000" },
+  { userID: 6, DateOfBirth: "05-07-1980" },
+  { userID: 7, DateOfBirth: "08-02-2010" }
+]
+function mergeUserData(a, b){
+
+     const updatedA=a?.map((i)=>{
+         return {...i,userID:i?.userID??null,Name:i?.Name??null,DateOfBirth:i?.DateOfBirth ?? null}
+     })
+     
+     const updatedB=b?.map((i)=>{
+         return {...i,userID:i?.userID??null,Name:i?.Name??null,DateOfBirth:i?.DateOfBirth ?? null}
+     })
+
+    const updatedC=[
+    ...updatedA,
+    ...updatedB
+    ];
+    
+    return updatedC;
+}
+const output=mergeUserData(a,b);
+console.log(output,"========Output========")
