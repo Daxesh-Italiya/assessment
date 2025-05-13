@@ -1,1 +1,62 @@
+const mergeUserData = (a, b) => {
+    let finalOutput = [];
+    b = b.sort((x,y) => x.userID - y.userID)
+      a = a.sort((x,y) => x.userID - y.userID)
+      
+      let lengthOfA = a.length;
+      let lengthOfB = b.length;
+      
+      let startOfA = 0
+      let startOfB=0
+    
+    while((startOfA < lengthOfA) || (startOfB < lengthOfB)){
+        if(a[startOfA]?.userID === b[startOfB]?.userID){
+            finalOutput.push({
+                userID:a[startOfA]?.userID,
+                Name: a[startOfA]?.Name,
+                 DateOfBirth: b[startOfB]?.DateOfBirth
+            })
+            startOfA++;
+            startOfB++;
+        }
+        else{
+            if(a?.[startOfA]?.userID){
+                  finalOutput.push({
+                userID:a[startOfA]?.userID,
+                Name: a[startOfA]?.Name,
+                 DateOfBirth: null
+            })
+             startOfA++;
+            }
+            if(b[startOfB]?.userID){
+                        finalOutput.push({
+                userID:b[startOfB]?.userID,
+                Name: null,
+                 DateOfBirth: b[startOfB]?.DateOfBirth
+            })
+              startOfB++;
+            }
+        }
+    }
+    
 
+    
+
+
+                
+                console.log(finalOutput)
+  
+}
+
+
+const a = [
+    { userID: 1, Name: "Jhon" },
+    { userID: 2, Name: "Jane" }
+]
+
+const b = [
+    { userID: 1, DateOfBirth: "02-05-2000" },
+    { userID: 3, DateOfBirth: "15-08-1998" }
+]
+  
+mergeUserData(a,b)
