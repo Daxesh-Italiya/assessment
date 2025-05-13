@@ -1,1 +1,84 @@
+// Online Javascript Editor for free
+// Write, Edit and Run your Javascript code using JS Online Compiler
+a = [
+  { userID: 2, Name: "Jane" },
+  { userID: 1, Name: "Jhon" },
+]
 
+b = [
+  { userID: 4, DateOfBirth: "20-08-1998" },
+  { userID: 1, DateOfBirth: "02-05-2000" },
+  { userID: 3, DateOfBirth: "15-08-1998" },
+  { userID: 5, DateOfBirth: "15-08-1998" }
+]
+
+const mapa={};
+const mapb={};
+a.map((item)=>mapa[item.userID]=item);
+b.map((item)=>mapb[item.userID]=item);
+
+const merged=[];
+Object.keys({...mapa,...mapb}).map((key)=>{
+    if(mapa[key] && mapb[key]){
+        merged.push({...mapa[key],...mapb[key]});
+    }
+    if(mapa[key] && !mapb[key]){
+        merged.push({...mapa[key],DateOfBirth:null});
+    }
+    if(!mapa[key] && mapb[key]){
+        merged.push({...mapb[key],Name:null});
+    }
+});
+
+const Analytics={
+nameMissingCount: 0,
+  dateOfBirthMissingCount: 0,
+  monthYearStats:{},
+};
+
+console.log("Merged :",merged);
+
+merged.forEach((data)=>{
+    
+    if(!data.Name){
+        Analytics.nameMissingCount++;
+    }
+    if(!data.DateOfBirth){
+        Analytics.dateOfBirthMissingCount++;
+    }
+    
+    // const 
+    // const date= data.DateOfBirth ? new Date() : null;
+    // console.log(data," ",date, " ",data.DateOfBirth)
+    if(data.DateOfBirth){
+        const [day,month,year]=data.DateOfBirth.split("-");
+        // console.log(day,month,year)
+        const dateKey=Analytics.monthYearStats[`${month}-${year}`];
+        // console.log("dateKey ",dateKey,Analytics.monthYearStats[`${month}-${year}`])
+        if(dateKey){
+            const [dayY,monthY,yearY]=dateKey.youngest.DateOfBirth.split("-");
+            const dateYoungest=new Date()
+            dateYoungest.setDate(dayY);
+            dateYoungest.setMonth(monthY);
+            dateYoungest.setYear(yearY);
+            const date=new Date();
+            date.setDate(day);
+            date.setMonth(month);
+            date.setYear(year);
+        // console.log(dateYoungest," ",date);
+            // console.log(" youngest ",dateYoungest," date ",date);
+            dateKey.count++,
+            dateKey.youngest = dateYoungest <= date ? dateKey.youngest : data;
+        }
+        else{
+        Analytics.monthYearStats[`${month}-${year}`]={
+            count: 0,
+            youngest:data
+        }
+        // console.log("-------------",Analytics.monthYearStats[`${month}-${year}`])
+        }
+    }
+    
+})
+
+console.log("Analytics : ",Analytics);
