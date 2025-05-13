@@ -1,1 +1,135 @@
+// Online Javascript Editor for free
+// Write, Edit and Run your Javascript code using JS Online Compiler
+
+
+
+const arrayofExample = [
+  { userID: 1, Name: "Jhon", DateOfBirth: "02-05-2000" },
+  { userID: 2, Name: "Jane", DateOfBirth: null },
+  { userID: 3, Name: null, DateOfBirth: "15-08-1998" }
+];
+
+a = [
+  { userID: 1, Name: "Jhon" }
+]
+
+b = [
+  { userID: 1, DateOfBirth: "02-05-2000" },
+  { userID: 2, DateOfBirth: "02-05-2000" }
+]
+
+
+const bothMerge = handleUserData(a,b);
+console.log("Merge user :",bothMerge);
+const analytics = handleAnalysis(arrayofExample);
+console.log("Analytics :",analytics);
+// console.log("Analytics :",handleAnalysis(arrayofExample));
+// console.log(handleAnalysis([...a,...b]));
+// console.log(handleUserData(a,b));
+// console.log(analytics);
+
+
+
+function handleAnalysis(mergedArray) {
+  let nameMissingCount = 0;
+  let dateOfBirthMissingCount = 0;
+  const monthYearStats = {};
+
+  for (const user of mergedArray) {
+    if (!user.Name) {
+        nameMissingCount++;
+    }
+    // console.log(dateOfBirthMissingCount,"dateOfBirthMissingCount",user.DateOfBirth);
+    if (!user.DateOfBirth) {
+      dateOfBirthMissingCount++;
+      continue;
+    }
+
+    const splitDate = user.DateOfBirth.split("-");
+    // console.log(splitDate);
+    const key = `${splitDate[1]}-${splitDate[2]}`;
+    const dobDate = new Date(`${splitDate[2]}-${splitDate[1]}-${splitDate[0]}`);
+// console.log(dobDate,"dobDate",key);
+    if (!monthYearStats[key]) {
+      monthYearStats[key] = {
+        count: 1,
+        youngest: user,
+        youngestDate: dobDate,
+      };
+    } else {
+      monthYearStats[key].count++;
+      if (dobDate > monthYearStats[key].youngestDate) {
+        monthYearStats[key].youngest = user;
+        monthYearStats[key].youngestDate = dobDate;
+      }
+    }
+  }
+
+  for (const key in monthYearStats) {
+    delete monthYearStats[key].youngestDate;
+  }
+
+  return {
+    nameMissingCount,
+    dateOfBirthMissingCount,
+    monthYearStats,
+  };
+}
+
+
+function handleUserData(a, b) {
+  const map = new Map();
+
+  for (const user of a) {
+    map.set(user.userID, {
+      userID: user.userID,
+      Name: user.Name ?? "",
+      DateOfBirth: user.DateOfBirth,
+    });
+  }
+
+  for (const user of b) {
+    if (map.has(user.userID)) {
+        // console.log(map,user)
+      map.get(user.userID).DateOfBirth = user.DateOfBirth;
+    } else {
+      map.set(user.userID, {
+        userID: user.userID,
+        Name: user.Name ?? "",
+        DateOfBirth: user.DateOfBirth ?? "",
+        // DateOfBirth: map.has(user.userID) ? map.get(user.userID).DateOfBirth = user.DateOfBirth; : user.DateOfBirth,
+      });
+    }
+  }
+// console.log(map,"ksbhfkdfd",map.values(),"jdfbjdf",Array.from(map))
+  return Array.from(map.values()).sort((a, b) => a.userID - b.userID);
+}
+
+
+// Map(1) { 1 => { userID: 1, Name: 'Jhon', DateOfBirth: null } } { userID: 1, DateOfBirth: '02-05-2000' }
+// [ { userID: 1, Name: 'Jhon', DateOfBirth: '02-05-2000' } ]
+// 0 dateOfBirthMissingCount 02-05-2000
+// [ '02', '05', '2000' ]
+// 2000-05-02T00:00:00.000Z dobDate 05-2000
+// Analytics : {
+//   nameMissingCount: 0,
+//   dateOfBirthMissingCount: 0,
+//   monthYearStats: { '05-2000': { count: 1, youngest: [Object] } }
+// }
+// 0 dateOfBirthMissingCount 02-05-2000
+// [ '02', '05', '2000' ]
+// 2000-05-02T00:00:00.000Z dobDate 05-2000
+// 0 dateOfBirthMissingCount null
+// 1 dateOfBirthMissingCount 15-08-1998
+// [ '15', '08', '1998' ]
+// 1998-08-15T00:00:00.000Z dobDate 08-1998
+// Analytics : {
+//   nameMissingCount: 1,
+//   dateOfBirthMissingCount: 1,
+//   monthYearStats: {
+//     '05-2000': { count: 1, youngest: [Object] },
+//     '08-1998': { count: 1, youngest: [Object] }
+//   }
+// }
+
 
