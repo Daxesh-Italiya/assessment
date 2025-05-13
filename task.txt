@@ -1,7 +1,7 @@
 const mergeUserData = (a, b) => {
     let finalOutput = [];
-    b = b.sort((x,y) => x.userID - y.userID)
-      a = a.sort((x,y) => x.userID - y.userID)
+    // b = b.sort((x,y) => x.userID - y.userID)
+    //   a = a.sort((x,y) => x.userID - y.userID)
       
       let lengthOfA = a.length;
       let lengthOfB = b.length;
@@ -44,19 +44,79 @@ const mergeUserData = (a, b) => {
 
 
                 
-                console.log(finalOutput)
+                // console.log(finalOutput)
+                
+                return finalOutput.sort((x,y) => x.userID - y.userID)
   
+}
+
+function generateAnalytics(data=[]){
+    let nameMissingCount = data?.filter(ele => !ele?.Name)?.length;
+    let dateOfBirthMissingCount =data?.filter(ele => !ele?.DateOfBirth)?.length;
+    
+    let monthYearStats ={}
+    
+    data.forEach(ele => {
+     if(ele?.DateOfBirth){
+            // console.log(ele?.DateOfBirth?.split("-"))
+            const [day,month,year] = ele?.DateOfBirth?.split("-")
+            let formatedDate = `${month}-${year}`
+            
+            if(formatedDate in monthYearStats){
+                // date is already existed
+                let existedDay = monthYearStats[formatedDate]["youngest"]["DateOfBirth"]?.split("-")?.[0]
+                
+                console.log(existedDay,day)
+                
+                monthYearStats={
+                    ...monthYearStats,
+                    [formatedDate]:{
+                        // ...monthYearStats[formatedDate],
+                        count: ++monthYearStats[formatedDate]["count"],
+                        youngest:+existedDay<+day?{
+                            ...monthYearStats[formatedDate]["youngest"]
+                        }:ele
+                    }
+                }
+            }
+            else{
+                monthYearStats = {
+                    ...monthYearStats,
+                    [formatedDate]:{
+                        count:1,
+                        youngest:ele
+                    }
+                }
+            }
+            
+     }
+    })
+
+console.log("\nAnalytics")
+console.log({
+    nameMissingCount,
+    dateOfBirthMissingCount,
+    monthYearStats
+})
+
+   
+
+    
 }
 
 
 const a = [
     { userID: 1, Name: "Jhon" },
-    { userID: 2, Name: "Jane" }
+    { userID: 6, Name: "Jane" }
 ]
 
 const b = [
-    { userID: 1, DateOfBirth: "02-05-2000" },
-    { userID: 3, DateOfBirth: "15-08-1998" }
+  { userID: 1, DateOfBirth: "02-05-2000" },
+  { userID: 3, DateOfBirth: "15-08-1998" }
+
 ]
-  
-mergeUserData(a,b)
+ 
+ console.log("\Merged Array")
+const generatedOutput = mergeUserData(a,b)
+console.log(generatedOutput)
+generateAnalytics(generatedOutput)
