@@ -1,0 +1,38 @@
+const a = [
+  { userID: 2, Name: "Jhon" },
+  { userID: 1, Name: "Jane" }
+]
+
+const b = [
+  { userID: 1, DateOfBirth: "02-05-2000" },
+  { userID: 3, DateOfBirth: "15-08-1998" },
+  { userID: 2 }
+]
+
+
+function mergeUserData(a, b) {
+    const data1 = a.map((i) => {
+        return {...i, userID: i?.userID, Name: i?.Name || null, DateOfBirth: i?.DateOfBirth || null }
+    })
+    
+    const data2 = b.map((i) => {
+        return {...i, userID: i?.userID, Name: i?.Name || null, DateOfBirth: i?.DateOfBirth || null}
+    })
+    
+    const updatedData = [...data1, ...data2]
+    
+    data1.map((i) => {
+        return data2.map((j) => {
+            if (i?.userID === j?.userID) {
+                let data = {...i, ...j, userID: i?.userID, Name: i?.Name || j?.Name, DateOfBirth: i?.DateOfBirth || j?.DateOfBirth}
+                 console.log(data)
+            } else {
+                
+            } 
+        }) 
+    })
+    
+    console.log(updatedData)
+}
+
+mergeUserData(a, b)
