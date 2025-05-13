@@ -1,1 +1,83 @@
+void main() {
+  var a = [
+    {"userID": 1, "Name": "Jhon"},
+    {"userID": 2, "Name": "Jane"},
+  ];
+
+  var b = [
+    {"userID": 1, "DateOfBirth": "02-05-2000"},
+    {"userID": 3, "DateOfBirth": "15-08-1998"},
+  ];
+
+  var finalList = <UserData>[];
+  for (int i = 0; i < a.length; i++) {
+
+    if (a[i].values.first == b[i].values.first) {
+      finalList.add(
+        UserData(
+          name: a[i].values.last,
+          DateOfBirth: b[i].values.last,
+          userID: a[i].values.first,
+        ),
+      );
+    } else {
+       finalList.add(
+        UserData(
+          name: a[i].values.last,
+           DateOfBirth:
+              a[i].values.first == b[i].values.first ? b[i].values.last : null,
+          userID: a[i].values.first,
+        ),
+      );
+    }
+    //     for (int j = 0; j < b.length; j++) {
+    //       if (a[i].values.first == b[j].values.first) {
+    //         finalList.add(
+    //           UserData(
+    //             name: a[i].values.last,
+    //             DateOfBirth: b[j].values.last,
+    //             userID: a[i].values.first,
+    //           ),
+    //         );
+    //         //       print("b[j] data  ==> ${b[i].values.last}");
+    //       } else {
+    //         print("else part ==> ");
+    //         finalList.add(
+    //           UserData(
+    //             name: a[i].values.last,
+    //             DateOfBirth:
+    //                 a[i].values.first == b[j].values.first
+    //                     ? b[j].values.last
+    //                     : null,
+    //             userID: a[i].values.first,
+    //           ),
+    //         );
+    //       }
+    //     }
+    //     for (int j = 0; j < b.length; j++) {
+    //       if (a[i].containsKey("userID") != b[j].containsKey("userID")) {
+    //         finalList.add(UserData(name: a[i].values.last,DateOfBirth: b[i].values.last,userID: a[i].values.first));
+    //         print("b[j] data  ==> ${a[i].values.last}");
+    //       } else {
+    //         print("else part ==> ");
+    //         finalList.add(UserData(name: a[i].values.last,DateOfBirth: b[i].values.last,userID: a[i].values.first));
+    //       }
+    //     }
+    print("final Data Name ==> ${finalList[i].name}");
+    print("final Data DateOfBirth ==> ${finalList[i].DateOfBirth}");
+    print("final Data userID ==> ${finalList[i].userID}");
+//     print("final model list value ==> ${finalList}");
+    //     print("value ==> ${a[i]}");
+  }
+  
+   print("final model list value ==> ${finalList}");
+}
+
+class UserData {
+  var name;
+  var userID;
+  var DateOfBirth;
+
+  UserData({this.name, this.userID, this.DateOfBirth});
+}
 
