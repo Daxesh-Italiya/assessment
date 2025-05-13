@@ -1,1 +1,62 @@
 
+
+a = [
+  { userID: 1, Name: "Jhon" },
+  { userID: 2, Name: "Jane" },
+]
+b = [
+  { userID: 1, DateOfBirth: "02-05-2000" },
+  { userID: 5, DateOfBirth: "15-08-1998" },
+  { userID: 4, DateOfBirth: "19-04-1998" }
+]
+const first={};
+const second={};
+
+a.map((i)=>first[i.userID]=i);
+b.map((i)=>second[i.userID]=i);
+const result=[];
+
+Object.keys({...first,...second}).map((key)=>{
+    if(first[key] && second[key]){
+        result.push({...first[key],...second[key]});
+    }
+    if(first[key] && !second[key]){
+        result.push({...first[key],DateOfBirth:null});
+    }
+    if(!first[key] && second[key]){
+        result.push({...second[key],Name:null});
+    }
+});
+//  console.log("result" , result)
+const task2={
+  nameMissingCount: 0,
+  dateOfBirthMissingCount: 0,
+  monthYearStats:{},
+};
+
+result.forEach((ele)=>{
+    if(!ele.Name){
+        task2.nameMissingCount++;
+    }
+    if(!ele.DateOfBirth){
+        task2.dateOfBirthMissingCount++;
+    }
+})
+console.log("task2 : ",task2);
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
