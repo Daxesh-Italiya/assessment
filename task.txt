@@ -1,1 +1,73 @@
 
+void main() {
+  List<Map<String, dynamic>> a = [
+    {"userID": 1, "Name": "Jhon"},
+  ];
+  List<Map<String, dynamic>> b = [
+    {"userID": 1, "DateOfBirth": "02-05-2000"},  {"userID": 2, "DateOfBirth": "02-05-2000"},
+  ];
+
+  List<Map<String, dynamic>> c = [];
+  
+  
+    bool checkIfAvilable( List<Map<String, dynamic>> c,  List<Map<String, dynamic>> a){
+     bool isAvailable = false;
+      
+      if(c.isEmpty)return isAvailable;
+      
+      for (int i = 0; i < a.length ; i++) {
+         for (int j = 0; j < c.length; j++) {
+        if(c[j]["userID"] == a[i]["userID"]){
+          isAvailable = true;
+        }else{
+          isAvailable = false;
+        }
+      }
+      }
+    return isAvailable;
+  }
+  
+
+  for (int i = 0; i < (a.length + b.length); i++) {
+    if (i < a.length) {
+      if (!checkIfAvilable(c,a)) {
+        c.add({
+          "userID": a[i]['userID'],
+          "Name": a[i]["Name"],
+          "DateOfBirth": a[i]["DateOfBirth"],
+        });
+      }
+    } else {
+      
+      int bIndex = b.length - i;
+      
+      if (!checkIfAvilable(c,b)) {
+        c.add({
+          "userID": b[bIndex]['userID'],
+          "Name": b[bIndex]["Name"],
+          "DateOfBirth": b[bIndex]["DateOfBirth"],
+        });
+      } else {
+        int index = c.indexOf(
+          c.firstWhere((e) => e["userID"] == b[bIndex]["userID"]),
+        );
+
+        c[index] = {
+          "userID":
+              c[index]['userID'] != null
+                  ? c[index]['userID']
+                  : b[bIndex]['userID'],
+          "Name":
+              c[index]["Name"] != null
+                  ? c[index]["Name"]
+                  : b[bIndex]['Name'],
+          "DateOfBirth":
+              c[index]["DateOfBirth"] != null
+                  ? c[index]["DateOfBirth"]
+                  : b[bIndex]["DateOfBirth"],
+        };
+      }
+    }
+  }
+  print(c);
+}
